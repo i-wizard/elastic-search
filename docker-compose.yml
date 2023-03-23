@@ -1,0 +1,48 @@
+version: '3.3'
+services:
+
+  db:
+    image: 'postgres:12'
+    hostname: postgres
+    container_name: postgres_container
+    volumes:
+      - gig_postgres_db_data:/var/lib/postgresql/data/
+    env_file:
+      - ./sample.env
+    ports:
+      - '5433:5432'
+    networks:
+      - gig-network
+
+  elasticsearch:
+    image: elasticsearch:7.10.1
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+
+  django:
+    build:
+      context: .
+      dockerfile: docker/django/Dockerfile
+    container_name: gig_api_container
+    command: /start_local.sh
+    volumes:
+      - .:/app
+    ports:
+      - 8000:8000
+    env_file:
+      - ./sample.env
+    depends_on:
+      - db
+      - elasticsearch
+    networks:
+      - gig-network
+
+
+volumes:
+  gig_postgres_db_data:
+  elasticsearch_data:
+
+networks:
+  gig-network:

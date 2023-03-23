@@ -1,0 +1,20 @@
+# Elasticsearch configuration file
+
+# Cluster settings
+cluster.name: my_cluster
+node.name: my_node
+
+# Network settings
+network.host: 0.0.0.0
+http.port: 9200
+
+# Discovery settings
+discovery.seed_hosts: ["node1", "node2"]
+discovery.type: single-node
+
+# Memory settings
+bootstrap.memory_lock: true
+indices.breaker.total.limit: 70%
+
+# Logging settings
+logger.org.elasticsearch.transport: TRACE
